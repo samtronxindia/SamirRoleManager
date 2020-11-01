@@ -1,0 +1,4 @@
+
+android.permission.INTERNET
+android.permission.SET_WALLPAPER
+android.permission.SET_WALLPAPER_HINTS

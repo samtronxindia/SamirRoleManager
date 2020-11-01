@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">SamirRoleManager</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="role1_heading">Video Recording Role</string>
+    <string name="role1_description">This role allows the application to capture the camera output and record audio.</string>
+
+    <string name="role2_heading">Location Role</string>
+    <string name="role2_description">This role allows the application to capture location information.</string>
+
+    <string name="role3_heading">External Storage</string>
+    <string name="role3_description">This role allows the application to store and retrieve files in the SDCARD.</string>
+
+    <string name="role4_heading">General Messaging Role</string>
+    <string name="role4_description">This role allows the application to send/read sms messages and call phones.</string>
+
+    <string name="role5_heading">Calendar Role</string>
+    <string name="role5_description">This role allows the application to read/write calendar events.</string>
+
+    <string name="role6_heading">Wallpaper Role</string>
+    <string name="role6_description">This role allows the application to set wallpaper and wallpaper hints.</string>
+
+    <string name="role7_heading">Contacts Role</string>
+    <string name="role7_description">This role allows the application to read/write contacts to the device.</string>
+
+    <string name="role8_heading">Phone Call Role</string>
+    <string name="role8_description">This role allows the application to make calls and read/write call logs.</string>
+
+    <string name="role9_heading">Bluetooth Role</string>
+    <string name="role9_description">This role allows the application to access bluetooth module.</string>
+
+    <string name="role10_heading">Miscellaneous Role</string>
+    <string name="role10_description">This role allows the application to vibrate the device, access NFC module and access the internet.</string>
+
+</resources>
