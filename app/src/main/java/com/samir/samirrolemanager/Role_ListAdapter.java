@@ -9,12 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -23,83 +25,53 @@ import java.util.concurrent.Executors;
 public class Role_ListAdapter extends
         RecyclerView.Adapter<Role_ListAdapter.RoleViewHolder> {
 
-    private final LinkedList<String> mRoleList;
-    private LayoutInflater mInflater;
+    private List<Role> roleList;
+    private final String TAG = "Role_ListAdapter";
+    protected volatile static int childPosition = -1;
+    static volatile int pos = 0;
 
-    static Context ctx;
-
-    private int position;
-
-    private static volatile RoleManagerDB INSTANCE;
-
-    static final ExecutorService databaseWriteExecutor =
-            Executors.newFixedThreadPool(6);
-
-    public Role_ListAdapter(Context context,
-                           LinkedList<String> roleList) {
-        mInflater = LayoutInflater.from(context);
-        this.mRoleList = roleList;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
+    public Role_ListAdapter(List<Role> roleList) {
+        this.roleList = roleList;
     }
 
     @NonNull
     @Override
     public Role_ListAdapter.RoleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.list_item,
-                parent, false);
-        return new RoleViewHolder(mItemView, this);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View view = layoutInflater.inflate(R.layout.content_main, parent, false);
+        return new RoleViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Role_ListAdapter.RoleViewHolder holder, int position) {
-        String mCurrent = mRoleList.get(position);
-        holder.roleItemView.setText(mCurrent);
-        /*if(position == 0){
-            holder.roleItemView.setTextColor(ColorStateList.valueOf(0xff0000ff ));
-        }*/
+    public void onBindViewHolder(@NonNull RoleViewHolder holder, int position) {
 
-      /*  holder.itemView.setOnCreateContextMenuListener(new View.OnClickListener());{
-            @Override
-                    public boolean onLongClick(View v){
-                setPosition(holder.getAdapterPosition());
-                return false;
-            }
-        };*/
+        Role role = roleList.get(position);
+        String roleName = role.getRoleHeading();
+        List<String> items = role.getRolePerms();
+
+        holder.roleView.setText(roleName);
+
+        ChildRecyclerAdapter childRecyclerAdapter = new ChildRecyclerAdapter(items);
+        holder.childRecyclerView.setAdapter(childRecyclerAdapter);
+    }
+
+    public static void getPosition(int posit){
+        pos = posit;
     }
 
     @Override
     public int getItemCount() {
-        return mRoleList.size();
+        return roleList.size();
     }
 
-    class RoleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public final TextView roleItemView;
-        final Role_ListAdapter mAdapter;
+    public class RoleViewHolder extends RecyclerView.ViewHolder {
+        public final TextView roleView;
+        RecyclerView childRecyclerView;
 
-        public void onClick(View v) {
-            // Get the position of the item that was clicked.
-            int mPosition = getLayoutPosition();
-            // Use that to access the affected item in mWordList.
-            String element = mRoleList.get(mPosition);
-            Toast.makeText(ctx,"Clicked on:" + element,Toast.LENGTH_SHORT).show();
-            // Change the word in the mWordList.
-            mRoleList.set(mPosition, "Clicked! " + element);
-            // Notify the adapter, that the data has changed so it can
-            // update the RecyclerView to display the data.
-            mAdapter.notifyDataSetChanged();
-        }
-
-        public RoleViewHolder(View itemView, Role_ListAdapter adapter) {
+        public RoleViewHolder(View itemView) {
             super(itemView);
-            roleItemView = itemView.findViewById(R.id.word);
-            this.mAdapter = adapter;
+            roleView = itemView.findViewById(R.id.sectionNameTextView);
+            childRecyclerView = itemView.findViewById(R.id.childRecyclerView);
         }
     }
 }

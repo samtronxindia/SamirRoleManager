@@ -1,5 +1,4 @@
 
 android.permission.INTERNET
-android.permission.CALL_LOG
 android.permission.READ_CALL_LOG
 android.permission.WRITE_CALL_LOG

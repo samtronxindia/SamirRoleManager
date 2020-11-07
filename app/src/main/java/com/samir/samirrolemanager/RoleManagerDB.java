@@ -1,7 +1,6 @@
 package com.samir.samirrolemanager;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -9,19 +8,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.samir.samirrolemanager.MainActivity.roles;
-import static java.sql.Types.NULL;
-
-@Database(entities = {RolePermission.class, RoleApp.class, RoleActiveApp.class}, version = 12, exportSchema = false)
+@Database(entities = {RolePermission.class, RoleApp.class, RoleActiveApp.class, RunningApps.class}, version = 13, exportSchema = false)
 public abstract class RoleManagerDB extends RoomDatabase {
     public abstract RoleManagerDAO roleManagerDAO();
 
-    private static volatile RoleManagerDB INSTANCE;
+    protected static volatile RoleManagerDB INSTANCE;
     private static boolean runComplete = false;
 
     Context context;
@@ -53,6 +47,7 @@ public abstract class RoleManagerDB extends RoomDatabase {
                 dao.deleteAllRolePerms();
                 dao.deleteAllRoleApps();
                 dao.deleteAllRoleActive();
+                dao.deleteAllRunningApps();
 
             });
         }

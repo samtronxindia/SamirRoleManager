@@ -10,7 +10,6 @@ import android.widget.Toast;
 public class MyBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "MyBroadcastReceiver";
 
-    //variables with an "m" at the start point to those being used in the current context
     protected static final String mRole = "Role";
     protected static final String mPackage = "Package";
     protected static final String roleHeading = "RoleHeading";

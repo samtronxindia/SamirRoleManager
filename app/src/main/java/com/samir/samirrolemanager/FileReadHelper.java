@@ -91,6 +91,14 @@ public class FileReadHelper extends AsyncTask<Context, Void, Void> {
                 dao.insertRoleActive1(ractive_new);
             }
 
+            //create several rows for the running_apps table
+            RunningApps runningapps = new RunningApps();
+            for (int i = 1; i < 20; i++) {
+                runningapps.setRunningAppId(i);
+                runningapps.setAppRunning(false);
+                dao.insertRunningApp(runningapps);
+            }
+
             //updating roles indexed by permId
             Log.v("SamirRoleManager","Outputting roles:");
             for (Map.Entry<Integer, List<String>> entry : roles.entrySet()) {

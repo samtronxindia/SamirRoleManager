@@ -10,9 +10,13 @@
     <uses-permission
         android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.REVOKE_RUNTIME_PERMISSIONS"
+    <uses-permission
+        android:name="android.permission.REVOKE_RUNTIME_PERMISSIONS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission
+        android:name="android.permission.REAL_GET_TASKS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -21,7 +25,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RoleActivationConfirmation"
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activityUA" />
+
+        <receiver
+            android:name=".RunningAppsAlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".AppUninstallRoleRevoked"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=".AppUninstallRoleRevoked">
+            <intent-filter>
+                <action android:name="com.samir.samirrolemanager.ROLEREVOKED" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RoleActivationConfirmation"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=".RoleActivationConfirmation">
@@ -41,6 +71,17 @@
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".AppUninstallReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".Prompt"
@@ -53,12 +94,7 @@
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".activityPA">
         </activity>
 
         <receiver android:name=".MyBroadcastReceiver">

@@ -3,14 +3,14 @@ package com.samir.samirrolemanager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.os.Bundle;
 import android.util.Log;
+
+import static com.samir.samirrolemanager.RoleManagerDB.databaseWriteExecutor;
 
 public class RoleActivationConfirmation extends AppCompatActivity {
 
@@ -70,6 +70,7 @@ public class RoleActivationConfirmation extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if(normalPermInRole){
                     //Try to re-launch the app
+                    Log.v(TAG,"Normal permission in role - restarting app.");
                     Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(mPackageName);
                     intent .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -77,7 +78,7 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                     startActivity(intent);
                 }
                 dialog.dismiss();
-                //onBackPressed();
+                onBackPressed();
             }
         });
         AlertDialog alert = builder.create();
@@ -110,11 +111,8 @@ public class RoleActivationConfirmation extends AppCompatActivity {
 
     private void activateRoleForApp(String mRole, String mPackageName) {
         Log.v(TAG,"Tring to activate role: " + mRole + " for package: " + mPackageName);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                RoleManagerDB roleManagerDB = RoleManagerDB.getDatabase(getApplicationContext());
-                RoleManagerDAO dao = roleManagerDB.roleManagerDAO();
+        databaseWriteExecutor.execute(() -> {
+                RoleManagerDAO dao = RoleManagerDB.INSTANCE.roleManagerDAO();
                 switch(mRole){
                     case "role1":
                         for (RoleActiveApp ractive1 : dao.getRolesActive()) {
@@ -126,13 +124,31 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                             dao.updateRoleActive1(ractive1.getRoleActiveId(),mPackageName);
                             break;
                         }
-                        //Log.v(TAG, "Permission INTERNET is: " + MainActivity.checkPermission(mPackageName, Manifest.permission.INTERNET, getApplicationContext()));
-                        //MainActivity.grantPermission(mPackageName,"android.permission.INTERNET",getApplicationContext());
-                        //Log.v(TAG, "Permission INTERNET is: " + MainActivity.checkPermission(mPackageName, Manifest.permission.INTERNET, getApplicationContext()));
+                        //Log.v(TAG, "Permission INTERNET is: " + activityPA.checkPermission(mPackageName, Manifest.permission.INTERNET, getApplicationContext()));
+                        //activityPA.grantPermission(mPackageName,"android.permission.INTERNET",getApplicationContext());
+                        //Log.v(TAG, "Permission INTERNET is: " + activityPA.checkPermission(mPackageName, Manifest.permission.INTERNET, getApplicationContext()));
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole1() != null) {
-                                BasePermission bp = mSettings.getPermissionLocked(rp1.getRole1().toString());
-                                MainActivity.grantPermission(mPackageName,rp1.getRole1().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole1().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole1().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole1().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -147,7 +163,26 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole2() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole2().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole2().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole2().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole2().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -162,7 +197,26 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole3() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole3().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole3().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole3().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole3().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -172,12 +226,31 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                                 continue;
                             }
                             //ra4.setRoleApp1(mPackageName);
-                            dao.updateRoleApp4(ractive4.getRoleActiveId(),mPackageName);
+                            dao.updateRoleActive4(ractive4.getRoleActiveId(),mPackageName);
                             break;
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole4() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole4().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole4().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole4().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole4().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -187,11 +260,30 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                                 continue;
                             }
                             //ra5.setRoleApp1(mPackageName);
-                            dao.updateRoleApp5(ractive5.getRoleActiveId(),mPackageName);
+                            dao.updateRoleActive5(ractive5.getRoleActiveId(),mPackageName);
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole5() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole5().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole5().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole5().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole5().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -201,12 +293,31 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                                 continue;
                             }
                             //ra1.setRoleApp1(mPackageName);
-                            dao.updateRoleApp6(ractive6.getRoleActiveId(),mPackageName);
+                            dao.updateRoleActive6(ractive6.getRoleActiveId(),mPackageName);
                             break;
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole6() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole6().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole6().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole6().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole6().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -216,12 +327,31 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                                 continue;
                             }
                             //ra2.setRoleApp1(mPackageName);
-                            dao.updateRoleApp7(ractive7.getRoleActiveId(),mPackageName);
+                            dao.updateRoleActive7(ractive7.getRoleActiveId(),mPackageName);
                             break;
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole7() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole7().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole7().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole7().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole7().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -231,12 +361,31 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                                 continue;
                             }
                             //ra3.setRoleApp1(mPackageName);
-                            dao.updateRoleApp8(ractive8.getRoleActiveId(),mPackageName);
+                            dao.updateRoleActive8(ractive8.getRoleActiveId(),mPackageName);
                             break;
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole8() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole8().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole8().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole8().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole8().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -246,12 +395,31 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                                 continue;
                             }
                             //ra4.setRoleApp1(mPackageName);
-                            dao.updateRoleApp9(ractive9.getRoleActiveId(),mPackageName);
+                            dao.updateRoleActive9(ractive9.getRoleActiveId(),mPackageName);
                             break;
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole9() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole9().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole9().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole9().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole9().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -261,29 +429,44 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                                 continue;
                             }
                             //ra5.setRoleApp1(mPackageName);
-                            dao.updateRoleApp10(ractive10.getRoleActiveId(),mPackageName);
+                            dao.updateRoleActive10(ractive10.getRoleActiveId(),mPackageName);
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole10() != null) {
-                                MainActivity.grantPermission(mPackageName,rp1.getRole10().toString(),getApplicationContext());
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole10().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole10().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole10().toString(),getApplicationContext());
                             }
                         }
                         break;
                     default:
                         Log.v("RoleManagerDB","Activate Role : Role not found!");
                 }
-            }
         });
     }
 
     private void checkRoleAlreadyGrantedToApp(String mRole, String mPackageName) {
         Log.v(TAG,"Check if role : " + mRole + " is granted for package: " + mPackageName);
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                RoleManagerDB roleManagerDB = RoleManagerDB.getDatabase(getApplicationContext());
-                RoleManagerDAO dao = roleManagerDB.roleManagerDAO();
+        databaseWriteExecutor.execute(() -> {
+                RoleManagerDAO dao = RoleManagerDB.INSTANCE.roleManagerDAO();
                 switch(mRole){
                     case "role1":
                         for (RoleApp ra1 : dao.getRolesForApp()) {
@@ -419,7 +602,6 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                     default:
                         Log.v("RoleManagerDB","Check Role Granted : Role not found!");
                 }
-            }
         });
     }
 }
