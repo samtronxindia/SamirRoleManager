@@ -99,6 +99,15 @@ public class FileReadHelper extends AsyncTask<Context, Void, Void> {
                 dao.insertRunningApp(runningapps);
             }
 
+            //create several rows for the cus_role_permission table
+            CustomRolePermission customRolePermission = new CustomRolePermission();
+            for (int i = 1; i < 10; i++) {
+                customRolePermission.setCusPermId(i);
+                String cusRoleInternalName = "role1" + i;
+                customRolePermission.setCusRoleInternalName(cusRoleInternalName);
+                dao.insertCustomRolePerm(customRolePermission);
+            }
+
             //updating roles indexed by permId
             Log.v("SamirRoleManager","Outputting roles:");
             for (Map.Entry<Integer, List<String>> entry : roles.entrySet()) {

@@ -11,11 +11,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Process;
 import android.os.UserHandle;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.TimerTask;
 public class activityPA extends AppCompatActivity {
 
     private Role_ListAdapter mAdapter;
+    private final String TAG="activityPA";
 
     //For initializing the PA in recyclerview with header/list_items
     List<Role> roleList = new ArrayList<>();
@@ -53,6 +56,17 @@ public class activityPA extends AppCompatActivity {
 
         RoleManagerDB roleManagerDB = RoleManagerDB.getDatabase(activityPA.this);
         RoleManagerDAO dao = roleManagerDB.roleManagerDAO();
+
+        AssetManager assetManager = getAssets();
+        Log.v(TAG,"Just a list of all assets.");
+        try {
+            String[] files = assetManager.list("");
+            for (String file : files){
+                Log.v(TAG, "List of items inside assets: " + file);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Observer to monitor for changes in the PA
         dao.getPermsForRoleLiveData().observe(this, new Observer<List<RolePermission>>() {
@@ -118,6 +132,13 @@ public class activityPA extends AppCompatActivity {
                 roleEightInit(dao, roleHeading);
                 roleNineInit(dao, roleHeading);
                 roleTenInit(dao, roleHeading);
+
+                //custom roles
+                roleElevenInit(dao);
+                roleTwelveInit(dao);
+                roleThirteenInit(dao);
+                roleFourteenInit(dao);
+                roleFifteenInit(dao);
             }
         });
     }
@@ -243,6 +264,80 @@ public class activityPA extends AppCompatActivity {
             }
         }
         roleList.add(new Role(tempRoleHeading, rolePerms));
+    }
+    /////////////////////////////
+
+    private void roleElevenInit(RoleManagerDAO dao) {
+        String tempRoleHeading;
+        List<String> rolePerms = new ArrayList<>();
+        CustomRolePermission customRolePermission = dao.getCustomRolePermission("role11");
+        for (RolePermission rp : dao.getPermsForRole()) {
+            if(rp.getRole11() != null){
+                rolePerms.add(rp.getRole11().toString());
+                Log.v("From activityPA:role_11 ",rp.getRole11().toString());
+            }
+        }
+        if(customRolePermission.getCusRoleName() != null){
+            roleList.add(new Role(customRolePermission.getCusRoleName(), rolePerms));
+        }
+    }
+    private void roleTwelveInit(RoleManagerDAO dao) {
+        String tempRoleHeading;
+        List<String> rolePerms = new ArrayList<>();
+        CustomRolePermission customRolePermission = dao.getCustomRolePermission("role12");
+        List<RolePermission> permsForRole = dao.getPermsForRole();
+        for (int i = 0; i < permsForRole.size(); i++) {
+            RolePermission rp = permsForRole.get(i);
+            if (rp.getRole12() != null) {
+                rolePerms.add(rp.getRole12().toString());
+                Log.v("From activityPA:role_12 ", rp.getRole12().toString());
+            }
+        }
+        if(customRolePermission.getCusRoleName() != null) {
+            roleList.add(new Role(customRolePermission.getCusRoleName(), rolePerms));
+        }
+    }
+    private void roleThirteenInit(RoleManagerDAO dao) {
+        String tempRoleHeading;
+        List<String> rolePerms = new ArrayList<>();
+        CustomRolePermission customRolePermission = dao.getCustomRolePermission("role13");
+        for (RolePermission rp : dao.getPermsForRole()) {
+            if(rp.getRole13() != null){
+                rolePerms.add(rp.getRole13().toString());
+                Log.v("From activityPA:role_13 ",rp.getRole13().toString());
+            }
+        }
+        if(customRolePermission.getCusRoleName() != null) {
+            roleList.add(new Role(customRolePermission.getCusRoleName(), rolePerms));
+        }
+    }
+    private void roleFourteenInit(RoleManagerDAO dao) {
+        String tempRoleHeading;
+        List<String> rolePerms = new ArrayList<>();
+        CustomRolePermission customRolePermission = dao.getCustomRolePermission("role14");
+        for (RolePermission rp : dao.getPermsForRole()) {
+            if(rp.getRole14() != null){
+                rolePerms.add(rp.getRole14().toString());
+                Log.v("From activityPA:role_14 ",rp.getRole14().toString());
+            }
+        }
+        if(customRolePermission.getCusRoleName() != null) {
+            roleList.add(new Role(customRolePermission.getCusRoleName(), rolePerms));
+        }
+    }
+    private void roleFifteenInit(RoleManagerDAO dao) {
+        String tempRoleHeading;
+        List<String> rolePerms = new ArrayList<>();
+        CustomRolePermission customRolePermission = dao.getCustomRolePermission("role15");
+        for (RolePermission rp : dao.getPermsForRole()) {
+            if(rp.getRole15() != null){
+                rolePerms.add(rp.getRole15().toString());
+                Log.v("From activityPA:role_15 ",rp.getRole15().toString());
+            }
+        }
+        if(customRolePermission.getCusRoleName() != null) {
+            roleList.add(new Role(customRolePermission.getCusRoleName(), rolePerms));
+        }
     }
 
     //getter method for getting role heading from Strings.xml

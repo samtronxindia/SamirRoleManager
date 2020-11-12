@@ -25,6 +25,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".NewAppAddRoleActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=".NewAppAddRole">
+            <intent-filter>
+                <action android:name="com.samir.samirrolemanager.ADDNEWROLE" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".NewPackageInstalledReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -94,10 +116,9 @@
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
-        <activity android:name=".activityPA">
-        </activity>
+        <activity android:name=".activityPA" />
 
-        <receiver android:name=".MyBroadcastReceiver">
+        <receiver android:name=".RoleRequestReceiver">
             <intent-filter>
                 <action android:name="com.samir.samirrolemanager.HELLO" />
 

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import static com.samir.samirrolemanager.MyBroadcastReceiver.mPackage;
+import static com.samir.samirrolemanager.RoleRequestReceiver.mPackage;
 
 public class AppUninstallReceiver extends BroadcastReceiver {
 

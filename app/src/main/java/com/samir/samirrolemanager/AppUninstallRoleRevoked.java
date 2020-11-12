@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import static com.samir.samirrolemanager.RoleManagerDB.databaseWriteExecutor;
 
 public class AppUninstallRoleRevoked extends AppCompatActivity {
 
-    private static volatile String[] mRoleArray = {"role1","role2","role3","role4","role5","role6","role7","role8","role9","role10"};
+    private final String TAG = "AppUninstallRoleRevoked";
+
+    private static volatile String[] mRoleArray = {"role1","role2","role3","role4","role5","role6","role7","role8","role9","role10","role11","role12","role13","role14","role15"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +20,12 @@ public class AppUninstallRoleRevoked extends AppCompatActivity {
         setContentView(R.layout.activity_app_uninstall_role_revoked);
 
         Intent intent = getIntent();
-        String mPackageName = intent.getStringExtra(MyBroadcastReceiver.mPackage);
+        String mPackageName = intent.getStringExtra(RoleRequestReceiver.mPackage);
 
         revokeRoleFromApp(mPackageName);
         deactivateRoleFromApp(mPackageName);
         removeFromRunningApps(mPackageName);
+        removeCustomRole(mPackageName);
         onBackPressed();
     }
 
@@ -38,6 +42,62 @@ public class AppUninstallRoleRevoked extends AppCompatActivity {
                     }
                 }
         });
+    }
+
+    private void removeCustomRole(String removedPkgName){
+
+        databaseWriteExecutor.execute(() -> {
+            RoleManagerDB roleManagerDB = RoleManagerDB.getDatabase(getApplicationContext());
+            RoleManagerDAO dao = roleManagerDB.roleManagerDAO();
+
+            if(dao.isCustomRolePermissionByPkg(removedPkgName)){
+                Log.v(TAG,"Found role!");
+                CustomRolePermission customRolePermission = dao.getCustomRolePermissionByPkg(removedPkgName);
+                String roleInternalName = customRolePermission.getCusRoleInternalName();
+                dao.updateCusRolePerms(customRolePermission.getCusPermId(),null,customRolePermission.getCusRoleInternalName(),null,null);
+                switch (roleInternalName){
+                    case "role11":
+                        int permId = 1;
+                        while(permId < 20){
+                            dao.updatePermRole11(permId,null);
+                            permId++;
+                        }
+                        break;
+                    case "role12":
+                        permId = 1;
+                        while(permId < 20){
+                            dao.updatePermRole12(permId,null);
+                            permId++;
+                        }
+                        break;
+                    case "role13":
+                        permId = 1;
+                        while(permId < 20){
+                            dao.updatePermRole13(permId,null);
+                            permId++;
+                        }
+                        break;
+                    case "role14":
+                        permId = 1;
+                        while(permId < 20){
+                            dao.updatePermRole14(permId,null);
+                            permId++;
+                        }
+                        break;
+                    case "role15":
+                        permId = 1;
+                        while(permId < 20){
+                            dao.updatePermRole15(permId,null);
+                            permId++;
+                        }
+                        break;
+                    default:
+                        Log.v(TAG,"Role not found!");
+                }
+            }
+
+        });
+
     }
 
     private void deactivateRoleFromApp(String mPackageName) {
@@ -150,6 +210,61 @@ public class AppUninstallRoleRevoked extends AppCompatActivity {
                                 if (ractive10.getRoleActive10() != null) {
                                     if (ractive10.getRoleActive10().equals(mPackageName)) {
                                         dao.deleteFromRoleActiveApp10(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role11":
+                            for (RoleActiveApp ractive11 : dao.getRolesActive()) {
+                                if (ractive11.getRoleActive11() != null) {
+                                    if (ractive11.getRoleActive11().equals(mPackageName)) {
+                                        dao.deleteFromRoleActiveApp11(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role12":
+                            for (RoleActiveApp ractive12 : dao.getRolesActive()) {
+                                if (ractive12.getRoleActive12() != null) {
+                                    if (ractive12.getRoleActive12().equals(mPackageName)) {
+                                        dao.deleteFromRoleActiveApp12(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role13":
+                            for (RoleActiveApp ractive13 : dao.getRolesActive()) {
+                                if (ractive13.getRoleActive13() != null) {
+                                    if (ractive13.getRoleActive13().equals(mPackageName)) {
+                                        dao.deleteFromRoleActiveApp13(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role14":
+                            for (RoleActiveApp ractive14 : dao.getRolesActive()) {
+                                if (ractive14.getRoleActive14() != null) {
+                                    if (ractive14.getRoleActive14().equals(mPackageName)) {
+                                        dao.deleteFromRoleActiveApp14(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role15":
+                            for (RoleActiveApp ractive15 : dao.getRolesActive()) {
+                                if (ractive15.getRoleActive15() != null) {
+                                    if (ractive15.getRoleActive15().equals(mPackageName)) {
+                                        dao.deleteFromRoleActiveApp15(mPackageName);
                                         break;
                                     }
                                     continue;
@@ -272,6 +387,61 @@ public class AppUninstallRoleRevoked extends AppCompatActivity {
                                 if (ra10.getRoleApp10() != null) {
                                     if (ra10.getRoleApp10().equals(mPackageName)) {
                                         dao.deleteFromRoleApp10(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role11":
+                            for (RoleApp ra11 : dao.getRolesForApp()) {
+                                if (ra11.getRoleApp11() != null) {
+                                    if (ra11.getRoleApp11().equals(mPackageName)) {
+                                        dao.deleteFromRoleApp11(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role12":
+                            for (RoleApp ra12 : dao.getRolesForApp()) {
+                                if (ra12.getRoleApp12() != null) {
+                                    if (ra12.getRoleApp12().equals(mPackageName)) {
+                                        dao.deleteFromRoleApp12(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role13":
+                            for (RoleApp ra13 : dao.getRolesForApp()) {
+                                if (ra13.getRoleApp13() != null) {
+                                    if (ra13.getRoleApp13().equals(mPackageName)) {
+                                        dao.deleteFromRoleApp13(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role14":
+                            for (RoleApp ra14 : dao.getRolesForApp()) {
+                                if (ra14.getRoleApp14() != null) {
+                                    if (ra14.getRoleApp14().equals(mPackageName)) {
+                                        dao.deleteFromRoleApp14(mPackageName);
+                                        break;
+                                    }
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "role15":
+                            for (RoleApp ra15 : dao.getRolesForApp()) {
+                                if (ra15.getRoleApp15() != null) {
+                                    if (ra15.getRoleApp15().equals(mPackageName)) {
+                                        dao.deleteFromRoleApp15(mPackageName);
                                         break;
                                     }
                                     continue;

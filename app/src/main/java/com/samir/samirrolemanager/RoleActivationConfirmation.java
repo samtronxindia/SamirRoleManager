@@ -10,6 +10,8 @@ import android.content.pm.PermissionInfo;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import static com.samir.samirrolemanager.RoleManagerDB.databaseWriteExecutor;
 
 public class RoleActivationConfirmation extends AppCompatActivity {
@@ -25,10 +27,8 @@ public class RoleActivationConfirmation extends AppCompatActivity {
         setContentView(R.layout.activity_role_activation_confirmation);
 
         Intent intent = getIntent();
-        String mPackageName = intent.getStringExtra(MyBroadcastReceiver.mPackage);
-        String mRole = intent.getStringExtra(MyBroadcastReceiver.mRole);
-        String mRoleHeading = intent.getStringExtra(MyBroadcastReceiver.roleHeading);
-        String mRoleDescription = intent.getStringExtra(MyBroadcastReceiver.roleDescription);
+        String mPackageName = intent.getStringExtra(RoleRequestReceiver.mPackage);
+        String mRole = intent.getStringExtra(RoleRequestReceiver.mRole);
 
         alreadyGranted = false;
         roleActivated = false;
@@ -57,32 +57,76 @@ public class RoleActivationConfirmation extends AppCompatActivity {
 
         //get the role heading
         String mRoleHeading = mRole + "_heading";
-        int resId = getApplicationContext().getResources().getIdentifier(mRoleHeading,"string", getPackageName());
-        String roleHeading = getApplicationContext().getString(resId);
 
-        builder.setTitle(roleHeading + " has been activated!");
-        //builder.setIcon(R.drawable.icon);
-        StringBuilder sb = new StringBuilder();
-        sb.append("The requested role has been activated!");
-        //sb.append(mRoleDescription);
-        builder.setMessage(sb.toString());
-        builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                if(normalPermInRole){
-                    //Try to re-launch the app
-                    Log.v(TAG,"Normal permission in role - restarting app.");
-                    Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(mPackageName);
-                    intent .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                    startActivity(intent);
+        String[] roleSplit = mRole.split("(?<=\\D)(?=\\d)");
+
+        ArrayList<String> roleDet = new ArrayList<>();
+
+
+        if(Integer.parseInt(roleSplit[1]) <= 10) {
+            int resId = getApplicationContext().getResources().getIdentifier(mRoleHeading,"string", getPackageName());
+            String roleHeading = getApplicationContext().getString(resId);
+
+            builder.setTitle(roleHeading + " has been activated!");
+            //builder.setIcon(R.drawable.icon);
+            StringBuilder sb = new StringBuilder();
+            sb.append("The requested role has been activated!");
+            //sb.append(mRoleDescription);
+            builder.setMessage(sb.toString());
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    if (normalPermInRole) {
+                        //Try to re-launch the app
+                        Log.v(TAG, "Normal permission in role - restarting app.");
+                        Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(mPackageName);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        startActivity(intent);
+                    }
+                    dialog.dismiss();
+                    onBackPressed();
                 }
-                dialog.dismiss();
-                onBackPressed();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    RoleManagerDB roleManagerDB = RoleManagerDB.getDatabase(RoleActivationConfirmation.this);
+                    RoleManagerDAO dao = roleManagerDB.roleManagerDAO();
+
+                    CustomRolePermission customRolePermission = dao.getCustomRolePermission(mRole);
+
+                    roleDet.add(0, customRolePermission.getCusRoleName().toString());
+                    roleDet.add(1, customRolePermission.getCusRoleDescription().toString());
+                }
+            });
+            builder.setTitle(roleDet.get(0) + " has been activated!");
+            //builder.setIcon(R.drawable.icon);
+            StringBuilder sb = new StringBuilder();
+            sb.append("The requested role has been activated!");
+            //sb.append(mRoleDescription);
+            builder.setMessage(sb.toString());
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    if (normalPermInRole) {
+                        //Try to re-launch the app
+                        Log.v(TAG, "Normal permission in role - restarting app.");
+                        Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(mPackageName);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        startActivity(intent);
+                    }
+                    dialog.dismiss();
+                    onBackPressed();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     private void showRoleNotGrantedDialog(String mPackageName, String mRole) {
@@ -90,23 +134,58 @@ public class RoleActivationConfirmation extends AppCompatActivity {
 
         //get the role heading
         String mRoleHeading = mRole + "_heading";
-        int resId = getApplicationContext().getResources().getIdentifier(mRoleHeading,"string", getPackageName());
-        String roleHeading = getApplicationContext().getString(resId);
+        String[] roleSplit = mRole.split("(?<=\\D)(?=\\d)");
 
-        builder.setTitle("ERROR: " + roleHeading + " has not been granted to " + mPackageName);
-        //builder.setIcon(R.drawable.icon);
-        StringBuilder sb = new StringBuilder();
-        sb.append("Please request this role prior to activating it! ");
-        //sb.append(mRoleDescription);
-        builder.setMessage(sb.toString());
-        builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.dismiss();
-                onBackPressed();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+        ArrayList<String> roleDet = new ArrayList<>();
+
+        if(Integer.parseInt(roleSplit[1]) <= 10) {
+            int resId = getApplicationContext().getResources().getIdentifier(mRoleHeading, "string", getPackageName());
+            String roleHeading = getApplicationContext().getString(resId);
+
+            builder.setTitle("ERROR: " + roleHeading + " has not been granted to " + mPackageName);
+            //builder.setIcon(R.drawable.icon);
+            StringBuilder sb = new StringBuilder();
+            sb.append("Please request this role prior to activating it! ");
+            //sb.append(mRoleDescription);
+            builder.setMessage(sb.toString());
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.dismiss();
+                    onBackPressed();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }else{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    RoleManagerDB roleManagerDB = RoleManagerDB.getDatabase(RoleActivationConfirmation.this);
+                    RoleManagerDAO dao = roleManagerDB.roleManagerDAO();
+
+                    CustomRolePermission customRolePermission = dao.getCustomRolePermission(mRole);
+
+                    roleDet.add(0,customRolePermission.getCusRoleName().toString());
+                    roleDet.add(1,customRolePermission.getCusRoleDescription().toString());
+                }
+            });
+
+            builder.setTitle("ERROR: " + roleDet.get(0) + " has not been granted to " + mPackageName);
+            //builder.setIcon(R.drawable.icon);
+            StringBuilder sb = new StringBuilder();
+            sb.append("Please request this role prior to activating it! ");
+            //sb.append(mRoleDescription);
+            builder.setMessage(sb.toString());
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.dismiss();
+                    onBackPressed();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+
+        }
     }
 
     private void activateRoleForApp(String mRole, String mPackageName) {
@@ -261,6 +340,7 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                             }
                             //ra5.setRoleApp1(mPackageName);
                             dao.updateRoleActive5(ractive5.getRoleActiveId(),mPackageName);
+                            break;
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole5() != null) {
@@ -430,6 +510,7 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                             }
                             //ra5.setRoleApp1(mPackageName);
                             dao.updateRoleActive10(ractive10.getRoleActiveId(),mPackageName);
+                            break;
                         }
                         for (RolePermission rp1 : dao.getPermsForRole()) {
                             if (rp1.getRole10() != null) {
@@ -453,6 +534,176 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 activityPA.grantPermission(mPackageName,rp1.getRole10().toString(),getApplicationContext());
+                            }
+                        }
+                        break;
+                    case "role11":
+                        for (RoleActiveApp ractive11 : dao.getRolesActive()) {
+                            if(ractive11.getRoleActive11() != null){
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            dao.updateRoleActive11(ractive11.getRoleActiveId(),mPackageName);
+                            break;
+                        }
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole11() != null) {
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole11().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole11().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole11().toString(),getApplicationContext());
+                            }
+                        }
+                        break;
+                    case "role12":
+                        for (RoleActiveApp ractive12 : dao.getRolesActive()) {
+                            if(ractive12.getRoleActive12() != null){
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            dao.updateRoleActive12(ractive12.getRoleActiveId(),mPackageName);
+                            break;
+                        }
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole12() != null) {
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole12().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole12().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole12().toString(),getApplicationContext());
+                            }
+                        }
+                        break;
+                    case "role13":
+                        for (RoleActiveApp ractive13 : dao.getRolesActive()) {
+                            if(ractive13.getRoleActive13() != null){
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            dao.updateRoleActive13(ractive13.getRoleActiveId(),mPackageName);
+                            break;
+                        }
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole13() != null) {
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole13().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole13().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole13().toString(),getApplicationContext());
+                            }
+                        }
+                        break;
+                    case "role14":
+                        for (RoleActiveApp ractive14 : dao.getRolesActive()) {
+                            if(ractive14.getRoleActive14() != null){
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            dao.updateRoleActive14(ractive14.getRoleActiveId(),mPackageName);
+                            break;
+                        }
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole14() != null) {
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole14().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole14().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole14().toString(),getApplicationContext());
+                            }
+                        }
+                        break;
+                    case "role15":
+                        for (RoleActiveApp ractive15 : dao.getRolesActive()) {
+                            if(ractive15.getRoleActive15() != null){
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            dao.updateRoleActive15(ractive15.getRoleActiveId(),mPackageName);
+                            break;
+                        }
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole11() != null) {
+                                String protectionLvl;
+                                try {
+                                    PermissionInfo pi = getPackageManager().getPermissionInfo(rp1.getRole15().toString(),PackageManager.GET_META_DATA);
+
+                                    switch(pi.getProtection()){
+                                        case PermissionInfo.PROTECTION_DANGEROUS:
+                                            protectionLvl = "dangerous";
+                                            break;
+                                        case PermissionInfo.PROTECTION_NORMAL:
+                                            protectionLvl = "normal";
+                                            normalPermInRole = true;
+                                            break;
+                                        default:
+                                            protectionLvl = "notNormalOrDangerous";
+                                    }
+                                    Log.v(TAG,"Permission: " + rp1.getRole15().toString() + " protection level: " + protectionLvl);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                activityPA.grantPermission(mPackageName,rp1.getRole15().toString(),getApplicationContext());
                             }
                         }
                         break;
@@ -590,6 +841,71 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                         for (RoleApp ra10 : dao.getRolesForApp()) {
                             if(ra10.getRoleApp10() != null){
                                 if(ra10.getRoleApp10().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            //dao.updateRoleApp5(ra5.getRoleId(),mPackageName);
+                        }
+                        break;
+                    case "role11":
+                        for (RoleApp ra11 : dao.getRolesForApp()) {
+                            if(ra11.getRoleApp11() != null){
+                                if(ra11.getRoleApp11().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            //dao.updateRoleApp5(ra5.getRoleId(),mPackageName);
+                        }
+                        break;
+                    case "role12":
+                        for (RoleApp ra12 : dao.getRolesForApp()) {
+                            if(ra12.getRoleApp12() != null){
+                                if(ra12.getRoleApp12().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            //dao.updateRoleApp5(ra5.getRoleId(),mPackageName);
+                        }
+                        break;
+                    case "role13":
+                        for (RoleApp ra13 : dao.getRolesForApp()) {
+                            if(ra13.getRoleApp13() != null){
+                                if(ra13.getRoleApp13().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            //dao.updateRoleApp5(ra5.getRoleId(),mPackageName);
+                        }
+                        break;
+                    case "role14":
+                        for (RoleApp ra14 : dao.getRolesForApp()) {
+                            if(ra14.getRoleApp14() != null){
+                                if(ra14.getRoleApp14().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                            //ra5.setRoleApp1(mPackageName);
+                            //dao.updateRoleApp5(ra5.getRoleId(),mPackageName);
+                        }
+                        break;
+                    case "role15":
+                        for (RoleApp ra15 : dao.getRolesForApp()) {
+                            if(ra15.getRoleApp15() != null){
+                                if(ra15.getRoleApp15().equals(mPackageName)){
                                     alreadyGranted = true;
                                     break;
                                 }

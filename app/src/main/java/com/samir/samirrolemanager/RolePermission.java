@@ -44,6 +44,36 @@ public class RolePermission {
     @ColumnInfo
     private String role10;
 
+    @ColumnInfo
+    private String role11;
+
+    @ColumnInfo
+    private String role12;
+
+    @ColumnInfo
+    private String role13;
+
+    @ColumnInfo
+    private String role14;
+
+    @ColumnInfo
+    private String role15;
+
+    @ColumnInfo
+    private String role16;
+
+    @ColumnInfo
+    private String role17;
+
+    @ColumnInfo
+    private String role18;
+
+    @ColumnInfo
+    private String role19;
+
+    @ColumnInfo
+    private String role20;
+
     public RolePermission(){}
 
     public int getPermId() {
@@ -133,4 +163,44 @@ public class RolePermission {
     public void setRole10(String role10) {
         this.role10 = role10;
     }
+
+    public String getRole11() { return role11; }
+
+    public void setRole11(String role11) { this.role11 = role11; }
+
+    public String getRole12() { return role12; }
+
+    public void setRole12(String role12) { this.role12 = role12; }
+
+    public String getRole13() { return role13; }
+
+    public void setRole13(String role13) { this.role13 = role13; }
+
+    public String getRole14() { return role14; }
+
+    public void setRole14(String role14) { this.role14 = role14; }
+
+    public String getRole15() { return role15; }
+
+    public void setRole15(String role15) { this.role15 = role15; }
+
+    public String getRole16() { return role16; }
+
+    public void setRole16(String role16) { this.role16 = role16; }
+
+    public String getRole17() { return role17; }
+
+    public void setRole17(String role17) { this.role17 = role17; }
+
+    public String getRole18() { return role18; }
+
+    public void setRole18(String role18) { this.role18 = role18; }
+
+    public String getRole19() { return role19; }
+
+    public void setRole19(String role19) { this.role19 = role19; }
+
+    public String getRole20() { return role20; }
+
+    public void setRole20(String role20) { this.role20 = role20; }
 }

@@ -3,16 +3,21 @@ package com.samir.samirrolemanager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import static com.samir.samirrolemanager.RoleManagerDB.databaseWriteExecutor;
 
 public class Prompt extends AppCompatActivity {
 
     private static volatile boolean alreadyGranted = false;
+    private static String TAG = "Prompt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +25,15 @@ public class Prompt extends AppCompatActivity {
         setContentView(R.layout.activity_prompt);
 
         Intent intent = getIntent();
-        String mPackageName = intent.getStringExtra(MyBroadcastReceiver.mPackage);
-        String mRole = intent.getStringExtra(MyBroadcastReceiver.mRole);
-        String mRoleHeading = intent.getStringExtra(MyBroadcastReceiver.roleHeading);
-        String mRoleDescription = intent.getStringExtra(MyBroadcastReceiver.roleDescription);
+        String mPackageName = intent.getStringExtra(RoleRequestReceiver.mPackage);
+        String mRole = intent.getStringExtra(RoleRequestReceiver.mRole);
+
+        ArrayList<String> roleDetails = new ArrayList<>(getRoleDetails(this, mRole));
+
+        String mRoleHeading = roleDetails.get(0);
+        String mRoleDescription = roleDetails.get(1);
+
+
         alreadyGranted = false;
         checkRoleAlreadyGrantedToApp(mRole, mPackageName);
 
@@ -33,6 +43,45 @@ public class Prompt extends AppCompatActivity {
         }else{
             onBackPressed();
         }
+    }
+
+    public ArrayList<String> getRoleDetails(Context mContext, String role){
+        String getRoleHeading = role + "_heading";
+        String getRoleDescription = role + "_description";
+
+        String packageName = mContext.getPackageName();
+
+        String[] roleSplit = role.split("(?<=\\D)(?=\\d)");
+
+        Log.v(TAG,"Split role: " + roleSplit[0] + " role number = " + roleSplit[1]);
+
+        ArrayList<String> roleDet = new ArrayList<>();
+
+        if(Integer.parseInt(roleSplit[1]) <= 10){
+            int resId = mContext.getResources().getIdentifier(getRoleHeading,"string", packageName);
+            String roleHeading = mContext.getString(resId);
+
+            resId = mContext.getResources().getIdentifier(getRoleDescription,"string",packageName);
+            String roleDescription = mContext.getString(resId);
+            roleDet.add(0, roleHeading);
+            roleDet.add(1, roleDescription);
+            return roleDet;
+        } else{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    RoleManagerDB roleManagerDB = RoleManagerDB.getDatabase(Prompt.this);
+                    RoleManagerDAO dao = roleManagerDB.roleManagerDAO();
+
+                    CustomRolePermission customRolePermission = dao.getCustomRolePermission(role);
+
+                    roleDet.add(0,customRolePermission.getCusRoleName().toString());
+                    roleDet.add(1,customRolePermission.getCusRoleDescription().toString());
+                }
+            });
+
+        }
+        return roleDet;
     }
 
     private void showRoleRequestDialog(String mPackageName, String mRole, String mRoleHeading, String mRoleDescription) {
@@ -47,7 +96,7 @@ public class Prompt extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 //activityPA.grantPermission(mPackageName, mPermission, getApplicationContext());
                 grantRoleToApp(mRole, mPackageName);
-                Toast.makeText(getApplicationContext(),"Permission Allowed",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Role Granted!",Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 onBackPressed();
                 //finish();
@@ -55,7 +104,7 @@ public class Prompt extends AppCompatActivity {
         });
         builder.setNegativeButton("Deny", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Toast.makeText(getApplicationContext(),"Permission Denied",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Role Denied!",Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 onBackPressed();
             }
@@ -178,8 +227,63 @@ public class Prompt extends AppCompatActivity {
                             }
                         }
                         break;
+                    case "role11":
+                        for (RoleApp ra11 : dao.getRolesForApp()) {
+                            if(ra11.getRoleApp11() != null){
+                                if(ra11.getRoleApp11().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        break;
+                    case "role12":
+                        for (RoleApp ra12 : dao.getRolesForApp()) {
+                            if(ra12.getRoleApp12() != null){
+                                if(ra12.getRoleApp12().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        break;
+                    case "role13":
+                        for (RoleApp ra13 : dao.getRolesForApp()) {
+                            if(ra13.getRoleApp13() != null){
+                                if(ra13.getRoleApp13().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        break;
+                    case "role14":
+                        for (RoleApp ra14 : dao.getRolesForApp()) {
+                            if(ra14.getRoleApp14() != null){
+                                if(ra14.getRoleApp14().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        break;
+                    case "role15":
+                        for (RoleApp ra15 : dao.getRolesForApp()) {
+                            if(ra15.getRoleApp15() != null){
+                                if(ra15.getRoleApp15().equals(mPackageName)){
+                                    alreadyGranted = true;
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        break;
                     default:
-                        throw new IllegalStateException("Role not found!");
+                        Log.v(TAG,"Role not found!");
                 }
         });
     }
@@ -230,6 +334,7 @@ public class Prompt extends AppCompatActivity {
                                 continue;
                             }
                             dao.updateRoleApp5(ra5.getRoleId(),mPackageName);
+                            break;
                         }
                         break;
                     case "role6":
@@ -274,10 +379,56 @@ public class Prompt extends AppCompatActivity {
                                 continue;
                             }
                             dao.updateRoleApp10(ra10.getRoleId(),mPackageName);
+                            break;
+                        }
+                        break;
+                    case "role11":
+                        for (RoleApp ra11 : dao.getRolesForApp()) {
+                            if(ra11.getRoleApp11() != null){
+                                continue;
+                            }
+                            dao.updateRoleApp11(ra11.getRoleId(),mPackageName);
+                            break;
+                        }
+                        break;
+                    case "role12":
+                        for (RoleApp ra12 : dao.getRolesForApp()) {
+                            if(ra12.getRoleApp12() != null){
+                                continue;
+                            }
+                            dao.updateRoleApp12(ra12.getRoleId(),mPackageName);
+                            break;
+                        }
+                        break;
+                    case "role13":
+                        for (RoleApp ra13 : dao.getRolesForApp()) {
+                            if(ra13.getRoleApp13() != null){
+                                continue;
+                            }
+                            dao.updateRoleApp13(ra13.getRoleId(),mPackageName);
+                            break;
+                        }
+                        break;
+                    case "role14":
+                        for (RoleApp ra14 : dao.getRolesForApp()) {
+                            if(ra14.getRoleApp14() != null){
+                                continue;
+                            }
+                            dao.updateRoleApp14(ra14.getRoleId(),mPackageName);
+                            break;
+                        }
+                        break;
+                    case "role15":
+                        for (RoleApp ra15 : dao.getRolesForApp()) {
+                            if(ra15.getRoleApp15() != null){
+                                continue;
+                            }
+                            dao.updateRoleApp15(ra15.getRoleId(),mPackageName);
+                            break;
                         }
                         break;
                     default:
-                        throw new IllegalStateException("Role not found!");
+                        Log.v(TAG,"Role not found!");
                 }
         });
     }

@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {RolePermission.class, RoleApp.class, RoleActiveApp.class, RunningApps.class}, version = 13, exportSchema = false)
+@Database(entities = {RolePermission.class, RoleApp.class, RoleActiveApp.class, RunningApps.class, CustomRolePermission.class}, version = 14, exportSchema = false)
 public abstract class RoleManagerDB extends RoomDatabase {
     public abstract RoleManagerDAO roleManagerDAO();
 
@@ -48,7 +48,7 @@ public abstract class RoleManagerDB extends RoomDatabase {
                 dao.deleteAllRoleApps();
                 dao.deleteAllRoleActive();
                 dao.deleteAllRunningApps();
-
+                dao.deleteAllCustomRolePerms();
             });
         }
     };

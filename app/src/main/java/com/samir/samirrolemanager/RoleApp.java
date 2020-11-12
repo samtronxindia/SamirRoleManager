@@ -44,6 +44,21 @@ public class RoleApp {
     @ColumnInfo
     private String roleApp10;
 
+    @ColumnInfo
+    private String roleApp11;
+
+    @ColumnInfo
+    private String roleApp12;
+
+    @ColumnInfo
+    private String roleApp13;
+
+    @ColumnInfo
+    private String roleApp14;
+
+    @ColumnInfo
+    private String roleApp15;
+
     public RoleApp(){}
 
     public int getRoleId() {
@@ -132,5 +147,45 @@ public class RoleApp {
 
     public void setRoleApp10(String roleApp10) {
         this.roleApp10 = roleApp10;
+    }
+
+    public String getRoleApp11() {
+        return roleApp11;
+    }
+
+    public void setRoleApp11(String roleApp11) {
+        this.roleApp11 = roleApp11;
+    }
+
+    public String getRoleApp12() {
+        return roleApp12;
+    }
+
+    public void setRoleApp12(String roleApp12) {
+        this.roleApp12 = roleApp12;
+    }
+
+    public String getRoleApp13() {
+        return roleApp13;
+    }
+
+    public void setRoleApp13(String roleApp13) {
+        this.roleApp13 = roleApp13;
+    }
+
+    public String getRoleApp14() {
+        return roleApp14;
+    }
+
+    public void setRoleApp14(String roleApp14) {
+        this.roleApp14 = roleApp14;
+    }
+
+    public String getRoleApp15() {
+        return roleApp15;
+    }
+
+    public void setRoleApp15(String roleApp15) {
+        this.roleApp15 = roleApp15;
     }
 }

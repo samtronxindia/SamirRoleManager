@@ -21,9 +21,6 @@ public interface RoleManagerDAO {
     @Query("SELECT * FROM role_permission")
     List<RolePermission> getPermsForRole();
 
-    @Query("SELECT * FROM role_permission WHERE role1 = :role1 AND permId=:permId")
-    RolePermission getRoleById(String role1, int permId);
-
     @Query("DELETE FROM role_permission")
     void deleteAllRolePerms();
 
@@ -60,8 +57,22 @@ public interface RoleManagerDAO {
     @Query("UPDATE role_permission SET role10=:role10  WHERE permId=:permId")
     void updatePermRole10(int permId, String role10);
 
+    @Query("UPDATE role_permission SET role11=:role11  WHERE permId=:permId")
+    void updatePermRole11(int permId, String role11);
+
+    @Query("UPDATE role_permission SET role12=:role12  WHERE permId=:permId")
+    void updatePermRole12(int permId, String role12);
+
+    @Query("UPDATE role_permission SET role13=:role13  WHERE permId=:permId")
+    void updatePermRole13(int permId, String role13);
+
+    @Query("UPDATE role_permission SET role14=:role14  WHERE permId=:permId")
+    void updatePermRole14(int permId, String role14);
+
+    @Query("UPDATE role_permission SET role15=:role15  WHERE permId=:permId")
+    void updatePermRole15(int permId, String role15);
+
     //for RoleApp (UA) table
-    //for RolePerssion (PA) table
     @Query("SELECT * FROM role_app")
     LiveData<List<RoleApp>> getAppsForRoleLiveData();
 
@@ -104,6 +115,21 @@ public interface RoleManagerDAO {
     @Query("DELETE FROM role_app WHERE roleApp10=:roleApp10")
     void deleteFromRoleApp10(String roleApp10);
 
+    @Query("DELETE FROM role_app WHERE roleApp11=:roleApp11")
+    void deleteFromRoleApp11(String roleApp11);
+
+    @Query("DELETE FROM role_app WHERE roleApp12=:roleApp12")
+    void deleteFromRoleApp12(String roleApp12);
+
+    @Query("DELETE FROM role_app WHERE roleApp13=:roleApp13")
+    void deleteFromRoleApp13(String roleApp13);
+
+    @Query("DELETE FROM role_app WHERE roleApp14=:roleApp14")
+    void deleteFromRoleApp14(String roleApp14);
+
+    @Query("DELETE FROM role_app WHERE roleApp15=:roleApp15")
+    void deleteFromRoleApp15(String roleApp15);
+
     @Query("UPDATE role_app SET roleApp1=:roleApp1  WHERE roleId=:roleId")
     void updateRoleApp1(int roleId, String roleApp1);
 
@@ -134,6 +160,21 @@ public interface RoleManagerDAO {
 
     @Query("UPDATE role_app SET roleApp10=:roleApp10  WHERE roleId=:roleId")
     void updateRoleApp10(int roleId, String roleApp10);
+
+    @Query("UPDATE role_app SET roleApp11=:roleApp11  WHERE roleId=:roleId")
+    void updateRoleApp11(int roleId, String roleApp11);
+
+    @Query("UPDATE role_app SET roleApp12=:roleApp12  WHERE roleId=:roleId")
+    void updateRoleApp12(int roleId, String roleApp12);
+
+    @Query("UPDATE role_app SET roleApp13=:roleApp13  WHERE roleId=:roleId")
+    void updateRoleApp13(int roleId, String roleApp13);
+
+    @Query("UPDATE role_app SET roleApp14=:roleApp14  WHERE roleId=:roleId")
+    void updateRoleApp14(int roleId, String roleApp14);
+
+    @Query("UPDATE role_app SET roleApp15=:roleApp15  WHERE roleId=:roleId")
+    void updateRoleApp15(int roleId, String roleApp15);
 
     //for RoleActiveApp table
     @Query("SELECT * FROM role_active")
@@ -175,6 +216,21 @@ public interface RoleManagerDAO {
     @Query("DELETE FROM role_active WHERE roleActive10=:roleActive10")
     void deleteFromRoleActiveApp10(String roleActive10);
 
+    @Query("DELETE FROM role_active WHERE roleActive11=:roleActive11")
+    void deleteFromRoleActiveApp11(String roleActive11);
+
+    @Query("DELETE FROM role_active WHERE roleActive12=:roleActive12")
+    void deleteFromRoleActiveApp12(String roleActive12);
+
+    @Query("DELETE FROM role_active WHERE roleActive13=:roleActive13")
+    void deleteFromRoleActiveApp13(String roleActive13);
+
+    @Query("DELETE FROM role_active WHERE roleActive14=:roleActive14")
+    void deleteFromRoleActiveApp14(String roleActive14);
+
+    @Query("DELETE FROM role_active WHERE roleActive15=:roleActive15")
+    void deleteFromRoleActiveApp15(String roleActive15);
+
     @Query("UPDATE role_active SET roleActive1=:roleActive1  WHERE roleActiveId=:roleActiveId")
     void updateRoleActive1(int roleActiveId, String roleActive1);
 
@@ -206,6 +262,21 @@ public interface RoleManagerDAO {
     @Query("UPDATE role_active SET roleActive10=:roleActive10  WHERE roleActiveId=:roleActiveId")
     void updateRoleActive10(int roleActiveId, String roleActive10);
 
+    @Query("UPDATE role_active SET roleActive11=:roleActive11  WHERE roleActiveId=:roleActiveId")
+    void updateRoleActive11(int roleActiveId, String roleActive11);
+
+    @Query("UPDATE role_active SET roleActive12=:roleActive12  WHERE roleActiveId=:roleActiveId")
+    void updateRoleActive12(int roleActiveId, String roleActive12);
+
+    @Query("UPDATE role_active SET roleActive13=:roleActive13  WHERE roleActiveId=:roleActiveId")
+    void updateRoleActive13(int roleActiveId, String roleActive13);
+
+    @Query("UPDATE role_active SET roleActive14=:roleActive14  WHERE roleActiveId=:roleActiveId")
+    void updateRoleActive14(int roleActiveId, String roleActive14);
+
+    @Query("UPDATE role_active SET roleActive15=:roleActive15  WHERE roleActiveId=:roleActiveId")
+    void updateRoleActive15(int roleActiveId, String roleActive15);
+
     //for RunningApps table
     @Query("SELECT * FROM running_apps")
     List<RunningApps> getRunningApps();
@@ -221,5 +292,24 @@ public interface RoleManagerDAO {
 
     @Query("UPDATE running_apps SET runningApp=:runningApp, appRunning=:appRunning  WHERE runningAppId=:runningAppId")
     void updateRunningApp(int runningAppId, String runningApp, boolean appRunning);
+
+    //for custom role permissions table
+    @Query("SELECT * FROM cus_role_permission WHERE cusRoleInternalName=:cusRoleInternalName")
+    CustomRolePermission getCustomRolePermission(String cusRoleInternalName);
+
+    @Query("SELECT EXISTS(SELECT * FROM cus_role_permission WHERE cusDefiningApp=:cusDefiningApp)")
+    boolean isCustomRolePermissionByPkg(String cusDefiningApp);
+
+    @Query("SELECT * FROM cus_role_permission WHERE cusDefiningApp=:cusDefiningApp")
+    CustomRolePermission getCustomRolePermissionByPkg(String cusDefiningApp);
+
+    @Query("DELETE FROM cus_role_permission")
+    void deleteAllCustomRolePerms();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertCustomRolePerm(CustomRolePermission customRolePermission);
+
+    @Query("UPDATE cus_role_permission SET cusRoleName=:cusRoleName, cusRoleInternalName=:cusRoleInternalName, cusRoleDescription=:cusRoleDescription, cusDefiningApp=:cusDefiningApp  WHERE cusPermId=:cusPermId")
+    void updateCusRolePerms(int cusPermId, String cusRoleName, String cusRoleInternalName, String cusRoleDescription, String cusDefiningApp);
 
 }
