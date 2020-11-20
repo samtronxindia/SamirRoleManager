@@ -14,6 +14,13 @@ Solarized dark             |  Solarized Ocean
 :-------------------------:|:-------------------------:
 ![](https://github.com/samtronxindia/SamirRoleManager/blob/master/RoleManagerUI.png)  |  ![](https://github.com/samtronxindia/SamirRoleManager/blob/master/UA.png)
 
+<p float="left">
+  <img src="/RoleManagerUI.png" width="100" />
+  <img src="/PA.png" width="100" /> 
+  <img src="/UA.png" width="100" />
+</p>
+
+
 Demo video:
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/YiQoUr_I2jQ/0.jpg)](http://www.youtube.com/watch?v=YiQoUr_I2jQ "Dissertation Demo for Samir Talegaon")
