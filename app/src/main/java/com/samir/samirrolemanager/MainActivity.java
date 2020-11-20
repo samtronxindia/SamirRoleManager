@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intentRunningAppAlarm = new Intent(MainActivity.this, RunningAppsAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intentRunningAppAlarm, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 8000;
+        int interval = 15000;
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
     }
 

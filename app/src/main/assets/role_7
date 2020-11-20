@@ -1,4 +1,3 @@
 
-android.permission.INTERNET
 android.permission.READ_CONTACTS
 android.permission.WRITE_CONTACTS

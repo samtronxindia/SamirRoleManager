@@ -25,7 +25,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewAppAddRoleActivity"
+        <activity android:name=".AppBackgroundRoleDeactivatorActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=".AppBackgroundRoleDeactivatorActivity">
+            <intent-filter>
+                <action android:name="com.samir.samirrolemanager.ROLEDEACTIVATOR" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".NewAppAddRoleActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=".NewAppAddRole">

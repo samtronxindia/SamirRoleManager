@@ -276,7 +276,92 @@ public class AppShutdownRevokeRoleHelper extends AsyncTask<Context, Void, Void> 
                             }
                         }
                         break;
-                        default:
+                    case "role11":
+                        for (RoleActiveApp ractive11 : dao.getRolesActive()) {
+                            if (ractive11.getRoleActive11() != null) {
+                                if (ractive11.getRoleActive11().equals(appNotRunningName)) {
+                                    dao.deleteFromRoleActiveApp11(appNotRunningName);
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        //now revoke all permissions
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole11() != null) {
+                                activityPA.revokePermission(appNotRunningName, rp1.getRole11().toString(), context);
+                            }
+                        }
+                        break;
+                    case "role12":
+                        for (RoleActiveApp ractive12 : dao.getRolesActive()) {
+                            if (ractive12.getRoleActive12() != null) {
+                                if (ractive12.getRoleActive12().equals(appNotRunningName)) {
+                                    dao.deleteFromRoleActiveApp12(appNotRunningName);
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        //now revoke all permissions
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole12() != null) {
+                                activityPA.revokePermission(appNotRunningName, rp1.getRole12().toString(), context);
+                            }
+                        }
+                        break;
+                    case "role13":
+                        for (RoleActiveApp ractive13 : dao.getRolesActive()) {
+                            if (ractive13.getRoleActive13() != null) {
+                                if (ractive13.getRoleActive13().equals(appNotRunningName)) {
+                                    dao.deleteFromRoleActiveApp13(appNotRunningName);
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        //now revoke all permissions
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole13() != null) {
+                                activityPA.revokePermission(appNotRunningName, rp1.getRole13().toString(), context);
+                            }
+                        }
+                        break;
+                    case "role14":
+                        for (RoleActiveApp ractive14 : dao.getRolesActive()) {
+                            if (ractive14.getRoleActive14() != null) {
+                                if (ractive14.getRoleActive14().equals(appNotRunningName)) {
+                                    dao.deleteFromRoleActiveApp14(appNotRunningName);
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        //now revoke all permissions
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole14() != null) {
+                                activityPA.revokePermission(appNotRunningName, rp1.getRole14().toString(), context);
+                            }
+                        }
+                        break;
+                    case "role15":
+                        for (RoleActiveApp ractive15 : dao.getRolesActive()) {
+                            if (ractive15.getRoleActive15() != null) {
+                                if (ractive15.getRoleActive15().equals(appNotRunningName)) {
+                                    dao.deleteFromRoleActiveApp15(appNotRunningName);
+                                    break;
+                                }
+                                continue;
+                            }
+                        }
+                        //now revoke all permissions
+                        for (RolePermission rp1 : dao.getPermsForRole()) {
+                            if (rp1.getRole15() != null) {
+                                activityPA.revokePermission(appNotRunningName, rp1.getRole15().toString(), context);
+                            }
+                        }
+                        break;
+                    default:
                             Log.v(TAG,"Role was not found.");
                     }
                 }

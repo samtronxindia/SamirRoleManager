@@ -64,32 +64,18 @@ public class RoleActivationConfirmation extends AppCompatActivity {
 
 
         if(Integer.parseInt(roleSplit[1]) <= 10) {
-            int resId = getApplicationContext().getResources().getIdentifier(mRoleHeading,"string", getPackageName());
-            String roleHeading = getApplicationContext().getString(resId);
 
-            builder.setTitle(roleHeading + " has been activated!");
-            //builder.setIcon(R.drawable.icon);
-            StringBuilder sb = new StringBuilder();
-            sb.append("The requested role has been activated!");
-            //sb.append(mRoleDescription);
-            builder.setMessage(sb.toString());
-            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    if (normalPermInRole) {
-                        //Try to re-launch the app
-                        Log.v(TAG, "Normal permission in role - restarting app.");
-                        Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(mPackageName);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                        startActivity(intent);
-                    }
-                    dialog.dismiss();
-                    onBackPressed();
-                }
-            });
-            AlertDialog alert = builder.create();
-            alert.show();
+            if (normalPermInRole) {
+                //Try to re-launch the app
+                Log.v(TAG, "Normal permission in role - restarting app.");
+                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(mPackageName);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                startActivity(intent);
+            }
+
+            onBackPressed();
         }else {
             runOnUiThread(new Runnable() {
                 @Override
@@ -103,29 +89,16 @@ public class RoleActivationConfirmation extends AppCompatActivity {
                     roleDet.add(1, customRolePermission.getCusRoleDescription().toString());
                 }
             });
-            builder.setTitle(roleDet.get(0) + " has been activated!");
-            //builder.setIcon(R.drawable.icon);
-            StringBuilder sb = new StringBuilder();
-            sb.append("The requested role has been activated!");
-            //sb.append(mRoleDescription);
-            builder.setMessage(sb.toString());
-            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    if (normalPermInRole) {
-                        //Try to re-launch the app
-                        Log.v(TAG, "Normal permission in role - restarting app.");
-                        Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(mPackageName);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                        startActivity(intent);
-                    }
-                    dialog.dismiss();
-                    onBackPressed();
-                }
-            });
-            AlertDialog alert = builder.create();
-            alert.show();
+
+            if (normalPermInRole) {
+                //Try to re-launch the app
+                Log.v(TAG, "Normal permission in role - restarting app.");
+                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(mPackageName);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                startActivity(intent);
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SamirRoleManager</string>
+    <string name="app_name">RoleManager</string>
 
     <string name="viewua">View the User-Assignment (UA)</string>
     <string name="viewpa">View the Permission-Assignment (PA)</string>
@@ -21,8 +21,8 @@
     <string name="role4_heading">General Messaging Role</string>
     <string name="role4_description">This role allows the application to send/read sms messages and call phones.</string>
 
-    <string name="role5_heading">Calendar Role</string>
-    <string name="role5_description">This role allows the application to read/write calendar events.</string>
+    <string name="role5_heading">Calendar and Contacts Role</string>
+    <string name="role5_description">This role allows the application to read/write calendar events and read/write contacts.</string>
 
     <string name="role6_heading">Wallpaper Role</string>
     <string name="role6_description">This role allows the application to set wallpaper and wallpaper hints.</string>
@@ -38,6 +38,9 @@
 
     <string name="role10_heading">Miscellaneous Role</string>
     <string name="role10_description">This role allows the application to vibrate the device, access NFC module and access the internet.</string>
+
+    <string name="role11_heading">RoleA</string>
+    <string name="role11_description">This role allows apps to access the device location and camera.</string>
     <string name="textview">TextView</string>
     <string name="role_manager">Role Manager</string>
 

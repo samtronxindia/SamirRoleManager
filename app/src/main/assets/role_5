@@ -1,4 +1,5 @@
 
-android.permission.INTERNET
 android.permission.READ_CALENDAR
 android.permission.WRITE_CALENDAR
+android.permission.READ_CONTACTS
+android.permission.WRITE_CONTACTS
