@@ -12,7 +12,7 @@ Screenshots:
 
 Solarized dark             |  Solarized Ocean
 :-------------------------:|:-------------------------:
-![](https://github.com/samtronxindia/SamirRoleManager/blob/master/RoleManager.png)  |  ![](https://github.com/samtronxindia/SamirRoleManager/blob/master/UA.png)
+![](https://github.com/samtronxindia/SamirRoleManager/blob/master/RoleManagerUI.png)  |  ![](https://github.com/samtronxindia/SamirRoleManager/blob/master/UA.png)
 
 Demo video:
 
