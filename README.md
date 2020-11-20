@@ -8,7 +8,7 @@ This is a broad overview of how this module fits into the Android platform archi
 
 ![alt text](https://github.com/samtronxindia/SamirRoleManager/blob/master/RoleManager.png?raw=true)
 
-Screenshots:
+UI Screenshots:
 
 <p float="left">
   <img src="/RoleManagerUI.png" width="300" />
