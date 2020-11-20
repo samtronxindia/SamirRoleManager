@@ -11,9 +11,9 @@ This is a broad overview of how this module fits into the Android platform archi
 Screenshots:
 
 <p float="left">
-  <img src="/RoleManagerUI.png" width="200" />
-  <img src="/PA.png" width="220" /> 
-  <img src="/UA.png" width="230" />
+  <img src="/RoleManagerUI.png" width="300" />
+  <img src="/PA.png" width="320" /> 
+  <img src="/UA.png" width="330" />
 </p>
 
 
