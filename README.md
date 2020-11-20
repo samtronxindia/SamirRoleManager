@@ -8,6 +8,12 @@ This is a broad overview of how this module fits into the Android platform archi
 
 ![alt text](https://github.com/samtronxindia/SamirRoleManager/blob/master/RoleManager.png?raw=true)
 
+Screenshots:
+
+Solarized dark             |  Solarized Ocean
+:-------------------------:|:-------------------------:
+![](https://github.com/samtronxindia/SamirRoleManager/blob/master/Screenshot_1605486780)  |  ![](https://github.com/samtronxindia/SamirRoleManager/blob/master/Screenshot_1605486790.png)
+
 Demo video:
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/YiQoUr_I2jQ/0.jpg)](http://www.youtube.com/watch?v=YiQoUr_I2jQ "Dissertation Demo for Samir Talegaon")
