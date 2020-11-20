@@ -12,8 +12,8 @@ Screenshots:
 
 <p float="left">
   <img src="/RoleManagerUI.png" width="300" />
-  <img src="/PA.png" width="320" /> 
-  <img src="/UA.png" width="330" />
+  <img src="/PA.png" width="325" /> 
+  <img src="/UA.png" width="340" />
 </p>
 
 
