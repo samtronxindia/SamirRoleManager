@@ -10,14 +10,10 @@ This is a broad overview of how this module fits into the Android platform archi
 
 Screenshots:
 
-Solarized dark             |  Solarized Ocean
-:-------------------------:|:-------------------------:
-![](https://github.com/samtronxindia/SamirRoleManager/blob/master/RoleManagerUI.png)  |  ![](https://github.com/samtronxindia/SamirRoleManager/blob/master/UA.png)
-
 <p float="left">
-  <img src="/RoleManagerUI.png" width="100" />
-  <img src="/PA.png" width="100" /> 
-  <img src="/UA.png" width="100" />
+  <img src="/RoleManagerUI.png" width="200" />
+  <img src="/PA.png" width="200" /> 
+  <img src="/UA.png" width="200" />
 </p>
 
 
